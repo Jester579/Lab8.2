@@ -1,35 +1,35 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <cctype>
+
 using namespace std;
 
-string Spaces(const string& s)
-{
-    size_t start = s.find_first_not_of(' ');
-    if (start == string::npos)
-        return ""; 
+string Spaces(const string& s) {
+    string result = s;
 
-    size_t end = s.find_last_not_of(' ');
+    result.erase(result.begin(), find_if(result.begin(), result.end(), [](char ch) {
+        return ch != ' ';
+        }));
 
-    string trimmed = s.substr(start, end - start + 1);
+    result.erase(find_if(result.rbegin(), result.rend(), [](char ch) {
+        return ch != ' ';
+        }).base(), result.end());
 
-    auto new_end = unique(trimmed.begin(), trimmed.end(), [](char a, char b) {
-        return isspace(a) && isspace(b);
+    auto new_end = unique(result.begin(), result.end(), [](char a, char b) {
+        return a == ' ' && b == ' ';
         });
-    trimmed.erase(new_end, trimmed.end());
+    result.erase(new_end, result.end());
 
-    return trimmed;
+    return result;
 }
 
-int main()
-{
+int main() {
     string str;
     cout << "Enter string:" << endl;
     getline(cin, str);
 
     string Str = Spaces(str);
-    cout << "Processed string: \"" << Str << "\"" << endl;
+    cout << "String: \"" << Str << "\"" << endl;
 
     return 0;
 }
